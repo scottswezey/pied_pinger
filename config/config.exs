@@ -24,7 +24,7 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :libcluster,
-  debug: true,
+  # debug: true,
   topologies: [
     default: [
       strategy: Cluster.Strategy.Gossip
