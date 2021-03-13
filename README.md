@@ -16,9 +16,13 @@ Step 3. Profit
 * Install Node.js dependencies with `npm install` inside the `assets` directory
 * Start Phoenix endpoint with `mix phx.server`
 
+### To run multiple nodes
+* Set `PORT` env var
+* Run `iex --sname NODE_NAME -S mix phx.server`
+
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-## To deploy in production
+## To deploy on Fly
 
 * See the [Fly.io Speedrun](https://fly.io/docs/speedrun/) docs.
 * Install flyctl, run `flyctl auth signup` or `flyctl auth login`
@@ -29,6 +33,10 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 * Profit!!!, or whatever.
 
 ## Changelog
+
+### Version 1.1.0 (draft)
+* `PORT` env var can be specified in development.
+* Adds `libcluster` dep with GOSSIP config.
 
 ### Version 1.0.0
 * Initial release

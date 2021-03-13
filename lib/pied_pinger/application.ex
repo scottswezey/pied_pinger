@@ -6,7 +6,13 @@ defmodule PiedPinger.Application do
   use Application
 
   def start(_type, _args) do
+    topologies = [
+      default: [
+        strategy: Cluster.Strategy.Gossip
+      ]
+    ]
     children = [
+      {Cluster.Supervisor, [topologies, [name: PiedPinger.ClusterSupervisor]]},
       # Start the Telemetry supervisor
       PiedPingerWeb.Telemetry,
       # Start the PubSub system
