@@ -1,0 +1,29 @@
+# fly.toml file generated for pied-pinger on 2021-03-13T08:01:52-08:00
+
+app = "pied-pinger"
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[[services]]
+  internal_port = 4000
+  protocol = "tcp"
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = "80"
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = "443"
+
+  [[services.tcp_checks]]
+    grace_period = "30s"
+    interval = "10s"
+    port = "4000"
+    restart_limit = 5
+    timeout = "2s"
