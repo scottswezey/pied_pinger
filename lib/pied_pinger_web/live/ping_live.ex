@@ -29,6 +29,7 @@ defmodule PiedPingerWeb.PingLive do
   #   {:noreply, assign(socket, running: false, results: [result])}
   # end
 
+  @impl true
   def handle_info({:results, record}, socket) do
     results = ping_data_to_tuple(record)
     {:noreply, assign(socket, message: "", results: [results])}
