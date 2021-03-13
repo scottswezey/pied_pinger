@@ -11,19 +11,10 @@ defmodule PiedPinger.Pinger do
   @spec ping(binary | Pinger.t()) :: Pinger.t()
   def ping(url) when is_binary(url) do
     Logger.info("Running test on #{url}")
-    %{scheme: s, host: h} = URI.parse(url)
-
-    case {s, h} do
-      {nil, _} -> {:error, :invalid_scheme}
-      {_, nil} -> {:error, :invalid_host}
-      _ ->
-        Task.start(__MODULE__, :ping, [new(url)])
-    end
+    Task.start(__MODULE__, :ping, [new(url)])
   end
 
   def ping(%__MODULE__{url: url} = record) do
-    Process.sleep(1_000)
-
     record
     |> Map.put(:run, true)
     |> Map.put(:region, region_name())

@@ -13,11 +13,11 @@ defmodule PiedPingerWeb.PingLive do
 
   @impl true
   def handle_event("run_test", %{"url" => url}, socket) do
-    case PingServer.ping(url) do
-      {:ok, _pid} ->
-        {:noreply, assign(socket, message: "Running test", url: url)}
+    case PingServer.multicall(url) do
       {:error, reason} ->
         {:noreply, assign(socket, message: "Invalid URL: #{inspect reason}", results: [], url: url)}
+      _ ->
+        {:noreply, assign(socket, message: "Running test", url: url)}
     end
   end
 
@@ -25,13 +25,11 @@ defmodule PiedPingerWeb.PingLive do
     {r, "HTTP #{c}", e}
   end
 
-  # def handle_info({:result, result}, socket) do
-  #   {:noreply, assign(socket, running: false, results: [result])}
-  # end
-
   @impl true
   def handle_info({:results, record}, socket) do
     results = ping_data_to_tuple(record)
-    {:noreply, assign(socket, message: "", results: [results])}
+    socket = update(socket, :results, &([results | &1]))
+
+    {:noreply, assign(socket, message: "")}
   end
 end
