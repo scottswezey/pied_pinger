@@ -5,19 +5,20 @@ defmodule PiedPingerWeb.PingLive do
 
   @impl true
   def mount(_params, _session, socket) do
+    session_id = :crypto.strong_rand_bytes(32) |> Base.url_encode64()
     if connected?(socket) do
-      Phoenix.PubSub.subscribe(PiedPinger.PubSub, "ping_live:all")
+      Phoenix.PubSub.subscribe(PiedPinger.PubSub, "ping_live:#{session_id}")
     end
-    {:ok, assign(socket, url: "", results: [], message: "No results to display.")}
+    {:ok, assign(socket, session_id: session_id, url: "", results: [], message: "No results to display.")}
   end
 
   @impl true
-  def handle_event("run_test", %{"url" => url}, socket) do
-    case PingServer.multicall(url) do
+  def handle_event("run_test", %{"url" => url}, %{assigns: %{session_id: sid}} = socket) do
+    case PingServer.multicall(url, sid) do
       {:error, reason} ->
         {:noreply, assign(socket, message: "Invalid URL: #{inspect reason}", results: [], url: url)}
       _ ->
-        {:noreply, assign(socket, message: "Running test", url: url)}
+        {:noreply, assign(socket, message: "Running test", url: url, results: [])}
     end
   end
 

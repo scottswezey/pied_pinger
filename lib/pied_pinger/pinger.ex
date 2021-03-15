@@ -5,23 +5,23 @@ defmodule PiedPinger.Pinger do
 
   require Logger
 
-  @spec new(any) :: Pinger.t()
+  @spec new(binary) :: Pinger.t()
   def new(url), do: %__MODULE__{url: url}
 
-  @spec ping(binary | Pinger.t()) :: Pinger.t()
-  def ping(url) when is_binary(url) do
+  @spec ping(binary | Pinger.t(), binary) :: Pinger.t()
+  def ping(url, sid) when is_binary(url) do
     Logger.info("Running test on #{url}")
-    Task.start(__MODULE__, :ping, [new(url)])
+    Task.start(__MODULE__, :ping, [new(url), sid])
   end
 
-  def ping(%__MODULE__{url: url} = record) do
+  def ping(%__MODULE__{url: url} = record, sid) do
     record
     |> Map.put(:run, true)
     |> Map.put(:region, region_name())
     |> Map.put(:result, HTTPoison.head(url))
     |> parse_error()
     |> parse_response_code()
-    |> broadcast()
+    |> broadcast(sid)
   end
 
   defp parse_error(%__MODULE__{result: {:error, reason}} = record) do
@@ -34,10 +34,10 @@ defmodule PiedPinger.Pinger do
   end
   defp parse_response_code(record), do: record
 
-  defp broadcast(record) do
-    Phoenix.PubSub.broadcast!(PiedPinger.PubSub, "ping_live:all", {:results, record})
+  defp broadcast(record, sid) do
+    Phoenix.PubSub.broadcast!(PiedPinger.PubSub, "ping_live:#{sid}", {:results, record})
     {:ok, record}
   end
 
-  defp region_name, do: "Unknown"
+  defp region_name, do: System.get_env("FLY_REGION", "Unknown Region")
 end

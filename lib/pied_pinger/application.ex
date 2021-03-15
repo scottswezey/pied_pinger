@@ -6,11 +6,7 @@ defmodule PiedPinger.Application do
   use Application
 
   def start(_type, _args) do
-    topologies = [
-      default: [
-        strategy: Cluster.Strategy.Gossip
-      ]
-    ]
+    topologies = Application.get_env(:libcluster, :topologies) || []
     children = [
       {Cluster.Supervisor, [topologies, [name: PiedPinger.ClusterSupervisor]]},
       # Start the Telemetry supervisor

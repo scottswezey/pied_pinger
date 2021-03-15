@@ -23,6 +23,14 @@ config :pied_pinger, PiedPingerWeb.Endpoint,
     ]
   ]
 
+config :libcluster,
+  # debug: true,
+  topologies: [
+    default: [
+      strategy: Cluster.Strategy.Gossip
+    ]
+  ]
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
