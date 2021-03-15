@@ -1,4 +1,6 @@
 defmodule PiedPinger.Pinger do
+  alias PiedPinger.FlyRegion
+
   defstruct url: "", status_code: nil, run: false, result: nil, error: nil, region: nil
 
   @type t() :: %__MODULE__{url: String.t()}
@@ -39,5 +41,5 @@ defmodule PiedPinger.Pinger do
     {:ok, record}
   end
 
-  defp region_name, do: System.get_env("FLY_REGION", "Unknown Region")
+  defp region_name, do: System.get_env("FLY_REGION", "Unknown") |> FlyRegion.location_for_code()
 end
