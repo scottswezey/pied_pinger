@@ -1,11 +1,10 @@
 defmodule PiedPinger.Pinger do
   alias PiedPinger.FlyRegion
+  require Logger
 
   defstruct url: "", status_code: nil, run: false, result: nil, error: nil, region: nil
 
   @type t() :: %__MODULE__{url: String.t()}
-
-  require Logger
 
   @spec new(binary) :: Pinger.t()
   def new(url), do: %__MODULE__{url: url}

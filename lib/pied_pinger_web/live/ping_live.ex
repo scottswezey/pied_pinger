@@ -9,7 +9,7 @@ defmodule PiedPingerWeb.PingLive do
     if connected?(socket) do
       Phoenix.PubSub.subscribe(PiedPinger.PubSub, "ping_live:#{session_id}")
     end
-    {:ok, assign(socket, session_id: session_id, url: "", results: [], message: "No results to display.")}
+    {:ok, assign(socket, session_id: session_id, url: "", results: [], message: "No results to display.", page_title: "Website Connectivity Check")}
   end
 
   @impl true

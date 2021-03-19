@@ -30,7 +30,6 @@ defmodule PiedPinger.FlyRegion do
     {abreviation, Enum.at(row, 1)}
   end)
   |> Map.new()
-  |> IO.inspect()
 
   @spec location_for_code(atom()) :: String.t()
   def location_for_code(code) when is_atom(code) do
