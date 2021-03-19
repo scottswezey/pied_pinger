@@ -20,7 +20,7 @@ Step 3. Profit
 * Set `PORT` env var
 * Run `iex --sname NODE_NAME -S mix phx.server`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Now you can visit [`localhost:PORT`](http://localhost:4000) from your browser.
 
 ## To deploy on Fly
 
@@ -36,7 +36,9 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 ### Version 1.1.0 (draft)
 * `PORT` env var can be specified in development.
-* Adds `libcluster` dep with GOSSIP config.
+* Adds `libcluster` dep with GOSSIP config in dev.
+* Add `libcluster` config for release
+* Adds support for multiple nodes.
 
 ### Version 1.0.0
 * Initial release
