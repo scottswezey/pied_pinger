@@ -10,7 +10,8 @@ defmodule PiedPinger.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: releases()
     ]
   end
 
@@ -45,7 +46,17 @@ defmodule PiedPinger.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:httpoison, "~> 1.8"}
+      {:httpoison, "~> 1.8"},
+      {:libcluster, "~> 3.2"}
+    ]
+  end
+
+  defp releases do
+    [
+      pied_pinger: [
+        include_executables_for: [:unix],
+        # applications: [pied_pinger: :permanent]
+      ]
     ]
   end
 

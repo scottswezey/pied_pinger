@@ -7,7 +7,9 @@ import Config
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :pied_pinger, PiedPingerWeb.Endpoint,
-  http: [port: 4000],
+  http: [
+    port: String.to_integer(System.get_env("PORT") || "4000"),
+  ],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
@@ -18,6 +20,14 @@ config :pied_pinger, PiedPingerWeb.Endpoint,
       "development",
       "--watch-stdin",
       cd: Path.expand("../assets", __DIR__)
+    ]
+  ]
+
+config :libcluster,
+  # debug: true,
+  topologies: [
+    default: [
+      strategy: Cluster.Strategy.Gossip
     ]
   ]
 

@@ -6,7 +6,9 @@ defmodule PiedPinger.Application do
   use Application
 
   def start(_type, _args) do
+    topologies = Application.get_env(:libcluster, :topologies) || []
     children = [
+      {Cluster.Supervisor, [topologies, [name: PiedPinger.ClusterSupervisor]]},
       # Start the Telemetry supervisor
       PiedPingerWeb.Telemetry,
       # Start the PubSub system

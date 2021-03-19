@@ -19,6 +19,23 @@ config :pied_pinger, PiedPingerWeb.Endpoint,
   server: true,
   secret_key_base: secret_key_base
 
+app_name =
+  System.get_env("FLY_APP_NAME") ||
+    raise "FLY_APP_NAME not available"
+
+config :libcluster,
+  debug: true,
+  topologies: [
+    dns: [
+      strategy: Cluster.Strategy.DNSPoll,
+      config: [
+        polling_interval: 5_000,
+        query: "global.#{app_name}.internal",
+        node_basename: "pied_pinger"
+      ]
+    ]
+  ]
+
 # ## Using releases (Elixir v1.9+)
 #
 # If you are doing OTP releases, you need to instruct Phoenix

@@ -13,6 +13,7 @@ RUN mix local.hex --force && \
 # set build ENV
 ENV MIX_ENV=prod
 ENV SECRET_KEY_BASE=wc+TejZzy1sXDp/L39P1GQ3nlnJrv44uJTW+wKdaQmpnyXIuLOZjlJeGAX8rU5lg
+ENV FLY_APP_NAME=piedpinger
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
@@ -31,7 +32,7 @@ RUN mix phx.digest
 # compile and build release
 COPY lib lib
 # uncomment COPY if rel/ exists
-# COPY rel rel
+COPY rel rel
 RUN mix do compile, release
 
 # prepare release image
@@ -48,5 +49,6 @@ COPY --from=build --chown=nobody:nobody /app/_build/prod/rel/pied_pinger ./
 
 ENV HOME=/app
 ENV SECRET_KEY_BASE=wc+TejZzy1sXDp/L39P1GQ3nlnJrv44uJTW+wKdaQmpnyXIuLOZjlJeGAX8rU5lg
+ENV FLY_APP_NAME=piedpinger
 
 CMD ["bin/pied_pinger", "start"]
