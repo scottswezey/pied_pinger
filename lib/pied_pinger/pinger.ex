@@ -2,7 +2,7 @@ defmodule PiedPinger.Pinger do
   alias PiedPinger.FlyRegion
   require Logger
 
-  defstruct url: "", status_code: nil, run: false, result: nil, error: nil, region: nil
+  defstruct url: "", status_code: nil, run: false, result: nil, error: nil, region: nil, run_time: 0
 
   @type t() :: %__MODULE__{url: String.t()}
 
@@ -16,10 +16,15 @@ defmodule PiedPinger.Pinger do
   end
 
   def ping(%__MODULE__{url: url} = record, sid) do
+    start_time = Time.utc_now()
+    result = HTTPoison.head(url)
+    elapsed_time = Time.diff(Time.utc_now(), start_time, :millisecond)
+
     record
     |> Map.put(:run, true)
     |> Map.put(:region, region_name())
-    |> Map.put(:result, HTTPoison.head(url))
+    |> Map.put(:result, result)
+    |> Map.put(:run_time, elapsed_time)
     |> parse_error()
     |> parse_response_code()
     |> broadcast(sid)

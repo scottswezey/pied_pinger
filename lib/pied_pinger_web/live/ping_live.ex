@@ -22,8 +22,8 @@ defmodule PiedPingerWeb.PingLive do
     end
   end
 
-  defp ping_data_to_tuple(%Pinger{status_code: c, error: e, region: r}) do
-    {r, "HTTP #{c}", e}
+  defp ping_data_to_tuple(%Pinger{status_code: c, error: e, region: r, run_time: t}) do
+    {r, "HTTP #{c}", e, t}
   end
 
   @impl true
@@ -33,4 +33,9 @@ defmodule PiedPingerWeb.PingLive do
 
     {:noreply, assign(socket, message: "")}
   end
+
+  defp is_up?(code, error)
+  defp is_up?(code, nil) when code in ["HTTP 200", "HTTP 301", "HTTP 302", "HTTP 418"], do: true
+  defp is_up?(_code, nil), do: false
+  defp is_up?(_, _error), do: false
 end
